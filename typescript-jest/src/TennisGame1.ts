@@ -30,7 +30,7 @@ export class TennisGame1 implements TennisGame {
     if (this.player1Point === this.player2Point) {
       this.changeStatus("TIE");
     } else if (this.player1Point >= 4 || this.player2Point >= 4) {
-      const absDiff = this.absDiff();
+      const absDiff = Math.abs(this.player1Point - this.player2Point);
 
       if (absDiff === 1) {
         this.changeStatus("ADVANTAGE");
@@ -40,10 +40,6 @@ export class TennisGame1 implements TennisGame {
     } else {
       this.changeStatus("DOING");
     }
-  }
-
-  private absDiff() {
-    return Math.abs(this.player1Point - this.player2Point);
   }
 
   private changeStatus(status: Status): void {
