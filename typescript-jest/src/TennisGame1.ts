@@ -55,6 +55,7 @@ export class TennisGame1 implements TennisGame {
       return this.getAdvantageScore();
     }
 
+    // this.status === "DONE"
     return this.getDoneScore();
   }
 
