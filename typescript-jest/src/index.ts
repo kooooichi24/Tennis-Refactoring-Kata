@@ -1,2 +1,2 @@
-export { ITennisGame } from './TennisGame/ITennisGame';
-export { TennisGame } from './TennisGame/TennisGame';
+export { ITennisGame } from './ITennisGame';
+export { TennisGame } from './TennisGame';
