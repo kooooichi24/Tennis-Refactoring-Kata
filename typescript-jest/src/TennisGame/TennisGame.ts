@@ -1,4 +1,4 @@
-import { Player } from "./Player";
+import { Player } from "../Player/Player";
 import { ITennisGame } from "./ITennisGame";
 
 type Status = "DOING" | "TIE" | "ADVANTAGE" | "DONE";
