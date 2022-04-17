@@ -4,8 +4,6 @@ import { TennisGame } from "./TennisGame";
 type Status = "DOING" | "TIE" | "ADVANTAGE" | "DONE";
 
 export class TennisGame1 implements TennisGame {
-  private player1Point: number = 0;
-  private player2Point: number = 0;
   private player1: Player;
   private player2: Player;
   private status: Status;
@@ -18,19 +16,19 @@ export class TennisGame1 implements TennisGame {
 
   wonPoint(playerName: string): void {
     if (this.player1.name === playerName) {
-      this.player1Point += 1;
+      this.player1.wonPoint();
     } else {
-      this.player2Point += 1;
+      this.player2.wonPoint();
     }
 
     this.judge();
   }
 
   private judge(): void {
-    if (this.player1Point === this.player2Point) {
+    if (this.player1.point === this.player2.point) {
       this.changeStatus("TIE");
-    } else if (this.player1Point >= 4 || this.player2Point >= 4) {
-      const absDiff = Math.abs(this.player1Point - this.player2Point);
+    } else if (this.player1.point >= 4 || this.player2.point >= 4) {
+      const absDiff = Math.abs(this.player1.point - this.player2.point);
 
       if (absDiff === 1) {
         this.changeStatus("ADVANTAGE");
@@ -62,8 +60,8 @@ export class TennisGame1 implements TennisGame {
   }
 
   private getDoingScore(): string {
-    const player1Score = this.convertPointToScore(this.player1Point);
-    const player2Score = this.convertPointToScore(this.player2Point);
+    const player1Score = this.convertPointToScore(this.player1.point);
+    const player2Score = this.convertPointToScore(this.player2.point);
 
     return `${player1Score}-${player2Score}`;
   }
@@ -84,7 +82,7 @@ export class TennisGame1 implements TennisGame {
   }
 
   private getTieScore(): string {
-    switch (this.player1Point) {
+    switch (this.player1.point) {
       case 0:
         return "Love-All";
       case 1:
@@ -97,7 +95,7 @@ export class TennisGame1 implements TennisGame {
   }
 
   private getAdvantageScore(): string {
-    const minusResult: number = this.player1Point - this.player2Point;
+    const minusResult: number = this.player1.point - this.player2.point;
 
     if (minusResult === 1) {
       return "Advantage player1";
@@ -107,7 +105,7 @@ export class TennisGame1 implements TennisGame {
   }
 
   private getDoneScore(): string {
-    const minusResult: number = this.player1Point - this.player2Point;
+    const minusResult: number = this.player1.point - this.player2.point;
 
     if (minusResult >= 2) {
       return "Win for player1";
