@@ -1,14 +1,15 @@
+import { Player } from "./Player";
 import { TennisGame } from "./TennisGame";
 
 export class TennisGame1 implements TennisGame {
   private m_score1: number = 0;
   private m_score2: number = 0;
-  private player1Name: string;
-  private player2Name: string;
+  private player1: Player;
+  private player2: Player;
 
   constructor(player1Name: string, player2Name: string) {
-    this.player1Name = player1Name;
-    this.player2Name = player2Name;
+    this.player1 = new Player(player1Name);
+    this.player2 = new Player(player2Name);
   }
 
   wonPoint(playerName: string): void {
