@@ -26,20 +26,6 @@ export class TennisGame implements ITennisGame {
     this.judge();
   }
 
-  getScore(): string {
-    if (this.status === "DOING") {
-      return this.getDoingScore();
-    }
-    if (this.status === "TIE") {
-      return this.getTieScore();
-    }
-    if (this.status === "ADVANTAGE") {
-      return this.getAdvantageScore();
-    }
-
-    return this.getDoneScore();
-  }
-
   private judge(): void {
     if (this.player1.point === this.player2.point) {
       this.changeStatus("TIE");
@@ -58,6 +44,20 @@ export class TennisGame implements ITennisGame {
 
   private changeStatus(status: Status): void {
     this.status = status;
+  }
+
+  getScore(): string {
+    if (this.status === "DOING") {
+      return this.getDoingScore();
+    }
+    if (this.status === "TIE") {
+      return this.getTieScore();
+    }
+    if (this.status === "ADVANTAGE") {
+      return this.getAdvantageScore();
+    }
+
+    return this.getDoneScore();
   }
 
   private getDoingScore(): string {
