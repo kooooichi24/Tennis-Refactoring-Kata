@@ -1,6 +1,6 @@
-import { TennisGame } from './TennisGame';
+import { ITennisGame } from './ITennisGame';
 
-export class TennisGame2 implements TennisGame {
+export class TennisGame2 implements ITennisGame {
   P1point: number = 0;
   P2point: number = 0;
 
