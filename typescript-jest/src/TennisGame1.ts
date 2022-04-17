@@ -48,72 +48,54 @@ export class TennisGame1 implements TennisGame {
   }
 
   getScore(): string {
+    let score: string = "";
+    let tempScore: number = 0;
     if (this.status === "DOING") {
-      return this.getDoingScore();
+      for (let i = 1; i < 3; i++) {
+        if (i === 1) tempScore = this.player1Point;
+        else {
+          score += "-";
+          tempScore = this.player2Point;
+        }
+        switch (tempScore) {
+          case 0:
+            score += "Love";
+            break;
+          case 1:
+            score += "Fifteen";
+            break;
+          case 2:
+            score += "Thirty";
+            break;
+          case 3:
+            score += "Forty";
+            break;
+        }
+      }
+    } else if (this.status === "TIE") {
+      switch (this.player1Point) {
+        case 0:
+          score = "Love-All";
+          break;
+        case 1:
+          score = "Fifteen-All";
+          break;
+        case 2:
+          score = "Thirty-All";
+          break;
+        default:
+          score = "Deuce";
+          break;
+      }
+    } else if (this.status === "ADVANTAGE") {
+      const minusResult: number = this.player1Point - this.player2Point;
+      if (minusResult === 1) score = "Advantage player1";
+      else if (minusResult === -1) score = "Advantage player2";
+    } else if (this.status === "DONE") {
+      const minusResult: number = this.player1Point - this.player2Point;
+      if (minusResult >= 2) score = "Win for player1";
+      else score = "Win for player2";
     }
-    if (this.status === "TIE") {
-      return this.getTieScore();
-    }
-    if (this.status === "ADVANTAGE") {
-      return this.getAdvantageScore();
-    }
-
-    // this.status === "DONE"
-    return this.getDoneScore();
-  }
-
-  private getDoingScore(): string {
-    const player1Score = this.convertPointToScore(this.player1Point);
-    const player2Score = this.convertPointToScore(this.player2Point);
-
-    return `${player1Score}-${player2Score}`;
-  }
-
-  private convertPointToScore(score: number): string {
-    switch (score) {
-      case 0:
-        return "Love";
-      case 1:
-        return "Fifteen";
-      case 2:
-        return "Thirty";
-      case 3:
-        return "Forty";
-      default:
-        return "";
-    }
-  }
-
-  private getTieScore(): string {
-    switch (this.player1Point) {
-      case 0:
-        return "Love-All";
-      case 1:
-        return "Fifteen-All";
-      case 2:
-        return "Thirty-All";
-      default:
-        return "Deuce";
-    }
-  }
-
-  private getAdvantageScore(): string {
-    const minusResult: number = this.player1Point - this.player2Point;
-
-    if (minusResult === 1) {
-      return "Advantage player1";
-    } else {
-      return "Advantage player2";
-    }
-  }
-
-  private getDoneScore(): string {
-    const minusResult: number = this.player1Point - this.player2Point;
-
-    if (minusResult >= 2) {
-      return "Win for player1";
-    } else {
-      return "Win for player2";
-    }
+    return score;
   }
 }
