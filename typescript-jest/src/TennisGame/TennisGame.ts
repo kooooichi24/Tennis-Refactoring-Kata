@@ -1,116 +1,49 @@
 import { Player } from "../Player/Player";
 import { ITennisGame } from "./ITennisGame";
-
-type Status = "DOING" | "TIE" | "ADVANTAGE" | "DONE";
+import { IGameStatus } from "../GameState/IGameStatus";
+import { TieStatus } from "../GameState/TieStatus";
+import { AdvantageStatus } from "../GameState/AdvantageStatus";
+import { DoneStatus } from "../GameState/DoneStatus";
+import { DoingStatus } from "../GameState/DoingStatus";
 
 export class TennisGame implements ITennisGame {
-  private gameNumber: number;
   private player1: Player;
   private player2: Player;
-  private status: Status;
+  private status: IGameStatus;
 
-  constructor(n: number, player1Name: string, player2Name: string) {
-    this.gameNumber = n;
+  constructor(
+    private nthGame: number,
+    player1Name: string,
+    player2Name: string
+  ) {
     this.player1 = new Player(player1Name);
     this.player2 = new Player(player2Name);
-    this.status = "TIE";
+    this.status = new TieStatus(this.player1.point);
   }
 
   wonPoint(playerName: string): void {
-    if (this.player1.name === playerName) {
-      this.player1.wonPoint();
-    } else {
-      this.player2.wonPoint();
-    }
+    this.player1.name === playerName
+      ? this.player1.wonPoint()
+      : this.player2.wonPoint();
 
-    this.judge();
+    this.judgeStatus();
   }
 
   getScore(): string {
-    switch (this.status) {
-      case "DOING":
-        return this.getDoingScore();
-      case "TIE":
-        return this.getTieScore();
-      case "ADVANTAGE":
-        return this.getAdvantageScore();
-      default:
-        return this.getDoneScore();
-    }
+    return this.status.getScore();
   }
 
-  private judge(): void {
-    if (this.player1.point === this.player2.point) {
-      this.changeStatus("TIE");
-    } else if (this.player1.point >= 4 || this.player2.point >= 4) {
-      const absDiff = Math.abs(this.player1.point - this.player2.point);
+  private judgeStatus(): void {
+    const absDiff = Math.abs(this.player1.point - this.player2.point);
 
-      if (absDiff === 1) {
-        this.changeStatus("ADVANTAGE");
-      } else {
-        this.changeStatus("DONE");
-      }
+    if (absDiff === 0) {
+      this.status = new TieStatus(this.player1.point);
+    } else if (this.player1.point < 4 && this.player2.point < 4) {
+      this.status = new DoingStatus(this.player1.point, this.player2.point);
+    } else if (absDiff === 1) {
+      this.status = new AdvantageStatus(this.player1.point, this.player2.point);
     } else {
-      this.changeStatus("DOING");
-    }
-  }
-
-  private changeStatus(status: Status): void {
-    this.status = status;
-  }
-
-  private getDoingScore(): string {
-    const player1Score = this.convertPointToScore(this.player1.point);
-    const player2Score = this.convertPointToScore(this.player2.point);
-
-    return `${player1Score}-${player2Score}`;
-  }
-
-  private convertPointToScore(score: number): string {
-    switch (score) {
-      case 0:
-        return "Love";
-      case 1:
-        return "Fifteen";
-      case 2:
-        return "Thirty";
-      case 3:
-        return "Forty";
-      default:
-        return "";
-    }
-  }
-
-  private getTieScore(): string {
-    switch (this.player1.point) {
-      case 0:
-        return "Love-All";
-      case 1:
-        return "Fifteen-All";
-      case 2:
-        return "Thirty-All";
-      default:
-        return "Deuce";
-    }
-  }
-
-  private getAdvantageScore(): string {
-    const minusResult: number = this.player1.point - this.player2.point;
-
-    if (minusResult === 1) {
-      return "Advantage player1";
-    } else {
-      return "Advantage player2";
-    }
-  }
-
-  private getDoneScore(): string {
-    const minusResult: number = this.player1.point - this.player2.point;
-
-    if (minusResult >= 2) {
-      return "Win for player1";
-    } else {
-      return "Win for player2";
+      this.status = new DoneStatus(this.player1.point, this.player2.point);
     }
   }
 }
