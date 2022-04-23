@@ -27,17 +27,16 @@ export class TennisGame implements ITennisGame {
   }
 
   getScore(): string {
-    if (this.status === "DOING") {
-      return this.getDoingScore();
+    switch (this.status) {
+      case "DOING":
+        return this.getDoingScore();
+      case "TIE":
+        return this.getTieScore();
+      case "ADVANTAGE":
+        return this.getAdvantageScore();
+      default:
+        return this.getDoneScore();
     }
-    if (this.status === "TIE") {
-      return this.getTieScore();
-    }
-    if (this.status === "ADVANTAGE") {
-      return this.getAdvantageScore();
-    }
-
-    return this.getDoneScore();
   }
 
   private judge(): void {
