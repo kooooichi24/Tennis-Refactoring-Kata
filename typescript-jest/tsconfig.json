@@ -23,7 +23,8 @@
   },
   "include": [
     "./src/**.ts",
-    "./test/*.spec.ts"
+    "./test/*.spec.ts",
+    "src/TennisGame/ITennisGame.ts", "src/Player/Player.ts"  
   ],
   "exclude": [
     "node_modules",
